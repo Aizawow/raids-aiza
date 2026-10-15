@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Raids</title>
+<meta name="description" content="Raids de la chaîne : hauts faits, classements, bestiaire et règles.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap">
+<link rel="stylesheet" href="site.css?v=7">
+</head>
+<body>
+<header class="entete">
+  <div class="conteneur">
+    <a class="marque" href="#vue=profil"><i></i><span id="titre">Raids</span></a>
+    <nav class="onglets" id="onglets">
+      <a data-vue="profil" href="#vue=profil">Profil</a>
+      <a data-vue="classements" href="#vue=classements">Classements</a>
+      <a data-vue="bestiaire" href="#vue=bestiaire">Bestiaire</a>
+      <a data-vue="raids" href="#vue=raids">Derniers raids</a>
+      <a data-vue="regles" href="#vue=regles">Règles</a>
+    </nav>
+    <form class="recherche" id="recherche" autocomplete="off">
+      <input id="recherche-joueur" list="liste-joueurs" placeholder="Chercher un raider" aria-label="Chercher un raider">
+      <datalist id="liste-joueurs"></datalist>
+    </form>
+  </div>
+</header>
+<main class="conteneur" id="vue"><p class="vide">Chargement…</p></main>
+<footer class="pied"><div class="conteneur" id="pied"></div></footer>
+<script src="site.js?v=8"></script>
+</body>
+</html>
