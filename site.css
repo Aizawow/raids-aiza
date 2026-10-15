@@ -1,0 +1,276 @@
+/* Site des raids — interface sobre aux couleurs de WoW ; textures du jeu réservées aux hauts faits et aux barres */
+@font-face { font-family: "Friz"; src: url("assets/FRIZQT__.TTF") format("truetype"); font-display: swap; }
+:root {
+  --fond: #0b0c10; --surface: #14161b; --surface-2: #1a1d23;
+  --bord: rgba(214, 178, 108, .16); --bord-fort: rgba(214, 178, 108, .38);
+  --or: #e8c46a; --texte: #e9e4d8; --doux: #a59d89; --tres-doux: #6f6a5e;
+  --vert: #3dbb3d; --vert-fonce: #1b6b1b;
+  --titre: "Friz", "Marcellus", Georgia, serif;
+  --corps: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --rayon: 12px;
+}
+* { box-sizing: border-box; }
+body { margin: 0; color: var(--texte); font: 15px/1.5 var(--corps); background: var(--fond); min-height: 100vh; }
+body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background: radial-gradient(1200px 500px at 50% -120px, rgba(232, 196, 106, .10), transparent 70%),
+              radial-gradient(900px 600px at 100% 100%, rgba(120, 60, 20, .10), transparent 70%); }
+a { color: inherit; text-decoration: none; }
+img { display: block; }
+.conteneur { max-width: 1180px; margin: 0 auto; padding: 0 20px; }
+
+/* ---------------------------------------------------------------- en-tête */
+.entete { position: sticky; top: 0; z-index: 10; background: rgba(11, 12, 16, .84); backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--bord); }
+.entete .conteneur { display: flex; align-items: center; gap: 28px; height: 64px; }
+.marque { display: flex; align-items: center; gap: 10px; font: 22px var(--titre); color: var(--or); white-space: nowrap; }
+.marque i { width: 28px; height: 28px; background: url("assets/ui/shields.png") 0 0 / 200% 100%; filter: drop-shadow(0 1px 2px #000); }
+.onglets { display: flex; gap: 4px; flex: 1; }
+.onglets a { position: relative; padding: 8px 12px; color: var(--doux); font-weight: 500; border-radius: 8px; white-space: nowrap;
+  transition: color .15s, background .15s; }
+.onglets a:hover { color: var(--texte); background: rgba(255, 255, 255, .04); }
+.onglets a.actif { color: var(--or); }
+.onglets a.actif::after { content: ""; position: absolute; left: 12px; right: 12px; bottom: -13px; height: 2px; background: var(--or); border-radius: 2px; }
+.recherche { position: relative; }
+.recherche input { width: 240px; height: 38px; padding: 0 12px 0 36px; border-radius: 10px; border: 1px solid var(--bord);
+  background: var(--surface); color: var(--texte); font: inherit; outline: none; transition: border-color .15s; }
+.recherche input:focus { border-color: var(--bord-fort); }
+.recherche::before { content: ""; position: absolute; left: 13px; top: 12px; width: 10px; height: 10px; border: 2px solid var(--doux); border-radius: 50%; }
+.recherche::after { content: ""; position: absolute; left: 24px; top: 24px; width: 6px; height: 2px; background: var(--doux); transform: rotate(45deg); }
+
+/* ---------------------------------------------------------------- page */
+main { padding: 28px 0 40px; min-height: 60vh; }
+.titre-page { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin: 0 0 20px; }
+.titre-page h1 { margin: 0; font: 30px var(--titre); color: var(--texte); font-weight: normal; }
+.titre-page p { margin: 0; color: var(--doux); }
+.surface { background: linear-gradient(180deg, var(--surface-2), var(--surface)); border: 1px solid var(--bord);
+  border-radius: var(--rayon); box-shadow: 0 10px 30px rgba(0, 0, 0, .35); }
+h2.section { display: flex; align-items: center; gap: 12px; margin: 28px 0 14px; font: 18px var(--titre); color: var(--or); font-weight: normal; }
+h2.section::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, var(--bord-fort), transparent); }
+.vide { padding: 30px; text-align: center; color: var(--doux); }
+.pied { border-top: 1px solid var(--bord); padding: 18px 0 30px; color: var(--tres-doux); font-size: 13px; text-align: center; }
+
+/* ---------------------------------------------------------------- accueil : retrouver son profil */
+.accueil { max-width: 620px; margin: 40px auto; padding: 40px 36px 30px; text-align: center; }
+.accueil .blason { display: block; width: 84px; height: 84px; margin: 0 auto 14px; background: url("assets/ui/shields.png") 0 0 / 200% 100%;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, .6)); }
+.accueil h1 { margin: 0 0 8px; font: 32px var(--titre); font-weight: normal; color: var(--or); }
+.accueil > p { margin: 0 auto 22px; max-width: 460px; color: var(--doux); }
+.accueil-recherche { display: flex; gap: 8px; max-width: 460px; margin: 0 auto; }
+.accueil-recherche input { flex: 1; height: 46px; padding: 0 14px; border-radius: 11px; border: 1px solid var(--bord-fort); background: var(--fond);
+  color: var(--texte); font: inherit; font-size: 16px; outline: none; }
+.accueil-recherche input:focus { border-color: var(--or); }
+.accueil-recherche button { height: 46px; padding: 0 18px; border: 0; border-radius: 11px; background: var(--or); color: #1a1206; font: 600 15px var(--corps); cursor: pointer; }
+.accueil-recherche button:hover { filter: brightness(1.08); }
+.accueil .erreur { min-height: 22px; margin: 12px 0 0; color: #ff9a7a; font-size: 14px; }
+.accueil .liens { display: flex; justify-content: center; gap: 22px; margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--bord); }
+.accueil .liens a { color: var(--doux); } .accueil .liens a:hover { color: var(--or); }
+.sous-onglets { display: flex; gap: 4px; margin: 22px 0 6px; border-bottom: 1px solid var(--bord); }
+.sous-onglets a { padding: 10px 16px; color: var(--doux); font-weight: 500; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.sous-onglets a:hover { color: var(--texte); }
+.sous-onglets a.actif { color: var(--or); border-bottom-color: var(--or); }
+.sous-onglets + .hf-page, .sous-onglets + .surface.filtres { margin-top: 18px; }
+
+/* ---------------------------------------------------------------- hauts faits : disposition */
+.hf-page { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 24px; align-items: start; }
+.categories { position: sticky; top: 84px; padding: 8px; }
+.categories a { display: block; padding: 10px 12px 12px; border-radius: 9px; color: var(--doux); transition: background .15s, color .15s; }
+.categories a + a { margin-top: 2px; }
+.categories a:hover { background: rgba(255, 255, 255, .035); color: var(--texte); }
+.categories a.actif { background: rgba(232, 196, 106, .09); color: var(--texte); box-shadow: inset 3px 0 0 var(--or); }
+.categories .ligne-cat { display: flex; justify-content: space-between; font-weight: 500; }
+.categories .ligne-cat small { color: var(--tres-doux); font-variant-numeric: tabular-nums; }
+.categories .mini { height: 3px; margin-top: 7px; background: rgba(255, 255, 255, .06); border-radius: 2px; overflow: hidden; }
+.categories .mini i { display: block; height: 100%; background: linear-gradient(90deg, var(--vert-fonce), var(--vert)); }
+
+/* profil d'un raider */
+.profil { display: flex; align-items: center; gap: 18px; padding: 18px 22px; }
+.profil .avatar { width: 64px; height: 64px; border-radius: 12px; border: 2px solid var(--classe, var(--or)); box-shadow: 0 0 22px -6px var(--classe, var(--or)); }
+.profil .nom { font: 28px var(--titre); color: var(--classe, var(--texte)); line-height: 1.1; }
+.profil .sous { color: var(--doux); margin-top: 4px; }
+.profil .points { margin-left: auto; display: flex; align-items: center; gap: 12px; text-align: right; }
+.profil .points small { display: block; color: var(--doux); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; }
+.profil .points b { font: 30px var(--titre); color: var(--texte); font-weight: normal; }
+.profil .points i { width: 54px; height: 54px; background: url("assets/ui/shields.png") 0 0 / 200% 100%; }
+.stats-rapides { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; margin-top: 14px; overflow: hidden; border-radius: var(--rayon);
+  border: 1px solid var(--bord); background: var(--bord); }
+.stats-rapides div { padding: 12px 16px; background: var(--surface); }
+.stats-rapides b { display: block; font: 20px var(--titre); font-weight: normal; color: var(--texte); }
+.stats-rapides span { color: var(--doux); font-size: 13px; }
+.invite { padding: 20px 22px; color: var(--doux); }
+.invite b { color: var(--or); font-weight: 500; }
+
+/* ---------------------------------------------------------------- un haut fait (textures du jeu) */
+/* parchemin du jeu recadré à l'échelle, comme en jeu : un haut fait déplié en montre simplement davantage ;
+   très haut, il grandit d'un bloc (cover) — jamais de raccord ni d'étirement */
+.hf { position: relative; margin-bottom: 10px; border-radius: 8px; overflow: hidden;
+  background: url("assets/ui/parchment-horizontal.png") top center / cover no-repeat;
+  box-shadow: inset 0 -14px 22px -10px rgba(0, 0, 0, .45), 0 0 0 1px rgba(0, 0, 0, .7), 0 0 0 2px rgba(201, 160, 92, .55), 0 6px 14px rgba(0, 0, 0, .45); }
+.hf.non { background-image: url("assets/ui/parchment-horizontal-desaturated.png");
+  box-shadow: inset 0 -14px 22px -10px rgba(0, 0, 0, .45), 0 0 0 1px rgba(0, 0, 0, .7), 0 0 0 2px rgba(130, 125, 115, .45), 0 6px 14px rgba(0, 0, 0, .45); }
+.hf-tete { display: grid; grid-template-columns: 64px minmax(0, 1fr) 70px; align-items: center; gap: 14px; min-height: 84px; padding: 10px 14px 10px 10px; }
+.hf.ouvrable .hf-tete { cursor: pointer; }
+.hf-icone { position: relative; width: 64px; height: 64px; }
+.hf-icone img { position: absolute; left: 12px; top: 12px; width: 40px; height: 40px; border-radius: 3px; }
+.hf-icone i { position: absolute; inset: 0; background: url("assets/ui/iconframe.png") 0 0 / 100% 100%; }
+.hf.non .hf-icone img { filter: grayscale(1) brightness(.72); }
+.hf-texte { text-align: center; min-width: 0; }
+.hf-texte h3 { margin: 0; font: 19px var(--titre); font-weight: normal; color: #fff; text-shadow: 0 1px 2px #000, 0 0 4px rgba(0, 0, 0, .8); }
+.hf-texte p { margin: 2px 0 0; color: #2a1a0a; font-size: 14px; }
+.hf.non .hf-texte h3 { color: #ece6d6; }
+.hf.non .hf-texte p { color: #ece6d6; text-shadow: 0 1px 2px rgba(0, 0, 0, .9); }
+.hf-droite { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.hf-bouclier { position: relative; width: 56px; height: 56px; background: url("assets/ui/shields.png") 0 0 / 200% 100%; filter: drop-shadow(0 2px 2px rgba(0, 0, 0, .5)); }
+.hf.non .hf-bouclier { background-position: 100% 0; }
+.hf-bouclier span { position: absolute; left: 0; right: 0; top: 16px; text-align: center; font: 16px var(--titre); color: #fff; text-shadow: 0 1px 2px #000; }
+.hf-date { font-size: 12px; color: #fff; text-shadow: 0 1px 2px #000; font-variant-numeric: tabular-nums; }
+.hf-chevron { position: absolute; left: 15px; bottom: 9px; width: 8px; height: 8px; border-right: 2px solid rgba(40, 20, 5, .6);
+  border-bottom: 2px solid rgba(40, 20, 5, .6); transform: rotate(45deg); transition: transform .2s, bottom .2s; }
+.hf.non .hf-chevron { border-color: rgba(255, 255, 255, .6); }
+.hf.ouvert .hf-chevron { transform: rotate(225deg); bottom: 5px; }
+/* détails : s'ouvrent en douceur ; le parchemin se répète vers le bas, sans s'étirer */
+.hf-details { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .25s ease; }
+.hf.ouvert .hf-details { grid-template-rows: 1fr; }
+.hf-details > div { overflow: hidden; min-height: 0; }
+.hf-details .interieur { margin: 0 18px 14px 88px; padding-top: 12px; border-top: 1px solid rgba(60, 35, 10, .25); }
+.hf.non .hf-details .interieur { border-top-color: rgba(255, 255, 255, .15); }
+.liste-crit { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 22px; }
+.crit { display: flex; align-items: center; gap: 8px; min-width: 0; font-size: 14px; color: #6b6355; }
+.crit span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.crit.fait { color: #176d17; font-weight: 600; }
+.hf.non .crit { color: #cfc8b8; text-shadow: 0 1px 1px #000; }
+.hf.non .crit.fait { color: #7cf07c; }
+.crit .coche { flex: none; width: 15px; height: 13px; border-radius: 2px; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .3); }
+.hf.non .crit .coche { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .3); }
+.crit.fait .coche { box-shadow: none !important; background: url("assets/ui/criteria-check.png") center / contain no-repeat; }
+.crit img { flex: none; width: 20px; height: 20px; border-radius: 3px; box-shadow: 0 0 0 1px #000; }
+
+/* ---------------------------------------------------------------- barre de progression (texture du jeu, coupée en 9 : les bouts restent nets) */
+.barre { position: relative; height: 23px; border-style: solid; border-width: 0 12px;
+  border-image: url("assets/ui/progressbar-border.png") 0 12 fill / 0 12px stretch; }
+.barre i { position: absolute; left: -8px; right: -8px; top: 5px; bottom: 5px; border-radius: 3px; overflow: hidden; }
+.barre i::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: var(--p, 0%);
+  background: linear-gradient(180deg, #74e874, var(--vert) 45%, var(--vert-fonce)); border-radius: 3px; transition: width .4s ease; }
+.barre span { position: absolute; top: 0; bottom: 0; left: -4px; right: -4px; display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  font-size: 13px; color: #fff; text-shadow: 0 1px 2px #000, 0 0 2px #000; white-space: nowrap; }
+.barre span em { font-style: normal; font-variant-numeric: tabular-nums; }
+.barre.seule span { justify-content: center; }
+.barre.grande { height: 32px; border-width: 0 15px; border-image-width: 0 15px; }
+.barre.grande i { top: 7px; bottom: 7px; left: -10px; right: -10px; }
+.barre.grande span { font: 15px var(--titre); }
+.hf-details .barre { margin-bottom: 12px; }
+.progressions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 24px; }
+.progressions .total { grid-column: 1 / -1; }
+.progressions a { display: block; transition: filter .15s; }
+.progressions a:hover { filter: brightness(1.15); }
+
+/* ---------------------------------------------------------------- classements */
+.pilules { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+.pilules a { padding: 7px 14px; border-radius: 20px; border: 1px solid var(--bord); color: var(--doux); font-size: 14px; transition: all .15s; }
+.pilules a:hover { color: var(--texte); border-color: var(--bord-fort); }
+.pilules a.actif { color: #1a1206; background: var(--or); border-color: var(--or); font-weight: 600; }
+.podium { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 18px; }
+.podium a { padding: 20px 18px; text-align: center; transition: transform .15s, border-color .15s; }
+.podium a:hover { transform: translateY(-2px); border-color: var(--bord-fort); }
+.podium .medaille { width: 30px; height: 30px; margin: 0 auto 12px; border-radius: 50%; display: grid; place-items: center; font: 15px var(--titre); color: #1a1206; }
+.podium .p1 .medaille { background: linear-gradient(#ffe38a, #c99a2e); }
+.podium .p2 .medaille { background: linear-gradient(#eef1f4, #9aa3ad); }
+.podium .p3 .medaille { background: linear-gradient(#f0b27a, #9a5a2a); }
+.podium img { width: 48px; height: 48px; margin: 0 auto 10px; border-radius: 10px; box-shadow: 0 0 0 1px #000; }
+.podium .nom { font: 18px var(--titre); }
+.podium .val { color: var(--doux); margin-top: 2px; font-variant-numeric: tabular-nums; }
+.table { overflow: hidden; }
+table.tab { width: 100%; border-collapse: collapse; }
+.tab th, .tab td { padding: 11px 16px; text-align: left; }
+.tab th { color: var(--tres-doux); font-weight: 500; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; border-bottom: 1px solid var(--bord); }
+.tab td { border-bottom: 1px solid rgba(255, 255, 255, .04); }
+.tab tr:last-child td { border-bottom: 0; }
+.tab tbody tr { transition: background .15s; }
+.tab tbody tr:hover { background: rgba(255, 255, 255, .025); }
+.tab .n { text-align: right; font-variant-numeric: tabular-nums; }
+.tab .rang { width: 52px; color: var(--tres-doux); font-variant-numeric: tabular-nums; }
+.joueur { display: inline-flex; align-items: center; gap: 10px; }
+.joueur img { width: 26px; height: 26px; border-radius: 6px; box-shadow: 0 0 0 1px #000; }
+.joueur span { font-weight: 500; }
+
+/* ---------------------------------------------------------------- bestiaire */
+.filtres { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px; margin-bottom: 18px; }
+.filtres select, .filtres input { height: 38px; padding: 0 10px; border-radius: 9px; border: 1px solid var(--bord); background: var(--surface);
+  color: var(--texte); font: inherit; font-size: 14px; outline: none; }
+.filtres input { flex: 1 1 180px; }
+.filtres .compte { align-self: center; margin-left: auto; color: var(--doux); font-size: 13px; padding: 0 6px; }
+.grille { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+.ennemi { position: relative; overflow: hidden; display: flex; flex-direction: column; transition: transform .15s, border-color .15s; }
+.ennemi:hover { transform: translateY(-2px); border-color: color-mix(in srgb, var(--r) 45%, transparent); }
+.ennemi .portrait { position: relative; aspect-ratio: 1; display: grid; place-items: end center; overflow: hidden;
+  background: radial-gradient(circle at 50% 62%, color-mix(in srgb, var(--r) 16%, #262019) 0, #0e0f12 72%); }
+.ennemi .portrait img { width: 92%; height: 92%; object-fit: contain; object-position: bottom; }
+.ennemi .portrait .point { align-self: center; font: 54px var(--titre); color: rgba(255, 255, 255, .12); }
+.ennemi.inconnu .portrait { background: radial-gradient(circle at 50% 62%, #1d1e23, #0e0f12 72%); }
+.ennemi.inconnu .nom { color: var(--tres-doux); }
+.ennemi.terne { opacity: .55; }
+.ennemi .etat { font-size: 12px; } .ennemi .etat.v { color: #9dff9d; } .ennemi .etat.r { color: var(--or); } .ennemi .etat.n { color: var(--tres-doux); }
+.ennemi .badge { position: absolute; left: 10px; top: 10px; padding: 2px 9px; border-radius: 10px; font-size: 11px; font-weight: 600;
+  letter-spacing: .03em; color: var(--r); background: rgba(0, 0, 0, .55); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--r) 45%, transparent); }
+.ennemi .corps { padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 3px; flex: 1; }
+.ennemi .nom { font: 17px var(--titre); color: var(--r); line-height: 1.2; }
+.ennemi .lieu { color: var(--doux); font-size: 13px; }
+.ennemi .tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.ennemi .tags span { padding: 1px 8px; border-radius: 9px; font-size: 11px; color: var(--doux); background: rgba(255, 255, 255, .05); }
+.ennemi .bas { margin-top: auto; padding-top: 10px; font-size: 12px; color: var(--tres-doux); }
+
+/* ---------------------------------------------------------------- derniers raids */
+.resultat { padding: 2px 9px; border-radius: 10px; font-size: 12px; font-weight: 600; }
+.resultat.v { color: #9dff9d; background: rgba(61, 187, 61, .12); }
+.resultat.e { color: #ffb38a; background: rgba(255, 120, 60, .12); }
+
+/* ---------------------------------------------------------------- règles */
+.regles { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 22px; align-items: start; }
+.regles .bloc { padding: 22px 26px; }
+.regles .bloc + .bloc { margin-top: 18px; }
+.regles h2 { margin: 0 0 12px; font: 20px var(--titre); color: var(--or); font-weight: normal; }
+.regles p, .regles li { color: #d6d0c2; }
+.regles p { margin: 0 0 10px; }
+.regles b { color: var(--texte); font-weight: 600; }
+.regles ul { padding-left: 18px; margin: 0; }
+.regles li + li { margin-top: 6px; }
+.attaques { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+.attaque { display: grid; grid-template-columns: 44px 1fr; gap: 12px; padding: 12px; border-radius: 10px; background: rgba(255, 255, 255, .025); border: 1px solid rgba(255, 255, 255, .04); }
+.attaque img { width: 44px; height: 44px; border-radius: 8px; box-shadow: 0 0 0 1px #000; }
+.attaque .t { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.attaque .t b { font: 15px var(--titre); font-weight: normal; color: var(--texte); }
+.attaque .t small { color: var(--or); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.attaque p { margin: 4px 0 0; font-size: 13px; color: var(--doux); }
+.rangs div { display: flex; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid rgba(255, 255, 255, .05); }
+.rangs div:last-child { border-bottom: 0; }
+.rangs small { color: var(--doux); }
+.sorts-boss { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+.sort-boss { display: grid; grid-template-columns: 44px 1fr; gap: 12px; padding: 12px; border-radius: 10px; background: rgba(255, 255, 255, .025); border: 1px solid rgba(255, 255, 255, .04); }
+.sort-boss img { width: 44px; height: 44px; border-radius: 8px; box-shadow: 0 0 0 1px #000; }
+.sort-boss b { font: 15px var(--titre); font-weight: normal; color: var(--texte); }
+.sort-boss p { margin: 4px 0 0; font-size: 13px; color: var(--doux); }
+
+/* ---------------------------------------------------------------- petits écrans */
+@media (max-width: 900px) {
+  .entete .conteneur { height: auto; flex-wrap: wrap; gap: 10px 16px; padding-top: 12px; padding-bottom: 8px; }
+  .onglets { order: 3; flex-basis: 100%; overflow-x: auto; }
+  .onglets a.actif::after { bottom: 0; }
+  .recherche { flex: 1; } .recherche input { width: 100%; }
+  .hf-page, .regles { grid-template-columns: 1fr; }
+  .categories { position: static; display: flex; overflow-x: auto; gap: 4px; }
+  .categories a { flex: none; min-width: 140px; } .categories a + a { margin-top: 0; }
+  .stats-rapides { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px) {
+  .conteneur { padding: 0 14px; }
+  .titre-page h1 { font-size: 24px; }
+  .profil { flex-wrap: wrap; } .profil .points { margin-left: 0; }
+  .progressions, .liste-crit { grid-template-columns: 1fr; }
+  .hf-tete { grid-template-columns: 54px minmax(0, 1fr) 52px; gap: 10px; }
+  .hf-icone { transform: scale(.85); transform-origin: left center; }
+  .hf-bouclier { width: 48px; height: 48px; } .hf-bouclier span { top: 13px; font-size: 14px; }
+  .hf-details .interieur { margin-left: 14px; }
+  .podium, .sorts-boss { grid-template-columns: 1fr; }
+  .accueil { padding: 30px 18px 22px; margin: 16px auto; } .accueil-recherche { flex-direction: column; }
+  .grille { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .tab th, .tab td { padding: 9px 10px; }
+}
