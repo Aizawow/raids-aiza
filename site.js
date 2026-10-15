@@ -268,6 +268,9 @@ function vueRegles() {
         </ul></section>
     </div><aside>
       <section class="surface bloc"><h2>Rangs</h2><div class="rangs">${R.rangs.map((r) => `<div><span style="color:${(RANGS[r.id] || [, r.couleur])[1]}">${esc(r.nom)}</span><small>${Math.round(100 * r.proba / total)} % · ${Math.round(r.duree_s / 60)} min</small></div>`).join('')}</div></section>
+      ${R.paris && R.paris.actif ? `<section class="surface bloc"><h2>Paris</h2><p>À la fin de chaque raid, une <b>prédiction</b> Twitch est lancée sur le raid suivant : mise tes points de chaîne au-dessus du chat pendant ${R.paris.fenetre_min} min. Les gagnants se partagent les points des perdants.</p>
+        <ul>${R.paris.questions.map((q) => `<li>${esc(q)}</li>`).join('')}</ul>
+        <p>Si le live s'arrête avant le raid suivant, tout le monde est remboursé.</p></section>` : ''}
       <section class="surface bloc"><h2>Ta classe</h2><p>Tape <b>!class</b> suivi de ta classe dans le chat (guerrier, paladin, chasseur, voleur, prêtre, chaman, mage, démoniste, druide) pour ta couleur et ton icône.</p></section>
       <section class="surface bloc"><h2>Hauts faits</h2><p>Chacun vaut ${D.hf.points} points : donjons complétés, familles de monstres, rares des zones, exploits de combat, points dépensés… Certains sont cachés. Ils tombent à la fin de chaque raid et se consultent dans ton profil.</p></section>
     </aside></div>`;
