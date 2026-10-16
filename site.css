@@ -16,6 +16,7 @@ body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-even
               radial-gradient(900px 600px at 100% 100%, rgba(120, 60, 20, .10), transparent 70%); }
 a { color: inherit; text-decoration: none; }
 img { display: block; }
+img.crane { display: inline-block; width: 16px; height: 16px; vertical-align: -3px; }
 .conteneur { max-width: 1180px; margin: 0 auto; padding: 0 20px; }
 
 /* ---------------------------------------------------------------- en-tête */
