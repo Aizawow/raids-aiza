@@ -16,6 +16,25 @@ const ORDRE_RANGS = ['legendaire', 'epique', 'rare', 'inhabituel', 'commun'];
 const etat = () => Object.fromEntries(new URLSearchParams(location.hash.slice(1)));
 const lien = (p) => '#' + new URLSearchParams(Object.entries({ ...etat(), ...p }).filter(([, v]) => v != null && v !== '')).toString();
 const lienProfil = (j, p = {}) => '#' + new URLSearchParams({ vue: 'profil', joueur: j.login, ...p }).toString();
+// dernier profil consulté (et son sous-onglet), gardé dans ce navigateur : l'onglet Profil y ramène,
+// jusqu'à ce qu'on ouvre le profil d'un autre raider
+const memoire = {
+  lire: () => { try { return new URLSearchParams(localStorage.getItem('raids.profil') || ''); } catch (e) { return new URLSearchParams(); } },
+  ecrire: (e, j) => {
+    const p = { joueur: j.login };
+    if (e.onglet) p.onglet = e.onglet;
+    if (e.cat) p.cat = e.cat;
+    try { localStorage.setItem('raids.profil', new URLSearchParams(p).toString()); } catch (x) { /* stockage indisponible */ }
+  },
+  lien: () => {                                  // lien du profil mémorisé, si ce raider existe toujours
+    const m = memoire.lire(), j = trouver(m.get('joueur'));
+    if (!j) return null;
+    const p = {};
+    if (m.get('onglet')) p.onglet = m.get('onglet');
+    if (m.get('cat')) p.cat = m.get('cat');
+    return lienProfil(j, p);
+  },
+};
 const trouver = (texte) => {
   const v = String(texte || '').trim().toLowerCase();
   return v ? D.joueurs.find((x) => x.nom.toLowerCase() === v || (x.login || '').toLowerCase() === v) : null;
@@ -48,7 +67,15 @@ $('recherche').onsubmit = (e) => {
 addEventListener('hashchange', afficher);
 
 function afficher() {
-  const e = etat(), vue = e.vue || 'profil';
+  let e = etat();
+  const vue = e.vue || 'profil';
+  if (vue === 'profil' && !e.joueur) {           // Profil sans pseudo (logo, première visite) : le dernier profil consulté
+    const l = memoire.lien();
+    if (l) { history.replaceState(null, '', l); e = etat(); }
+  }
+  const actuel = vue === 'profil' && trouver(e.joueur);
+  if (actuel) memoire.ecrire(e, actuel);
+  document.querySelector('#onglets a[data-vue="profil"]').href = memoire.lien() || '#vue=profil';
   document.querySelectorAll('#onglets a').forEach((a) => a.classList.toggle('actif', a.dataset.vue === vue));
   const vues = { profil: vueProfil, classements: vueClassements, bestiaire: vueBestiaire, raids: vueRaids, regles: vueRegles };
   $('vue').innerHTML = (vues[vue] || vueProfil)(e);
