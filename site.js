@@ -309,7 +309,7 @@ function brancherBestiaire(j) {
       }
       return `<div class="surface ennemi${j && statut(c) === 'n' ? ' terne' : ''}" style="--r:${coul}">
         <div class="portrait">${c.image ? `<img src="${c.image}" alt="" loading="lazy">` : '<span class="point">?</span>'}<span class="badge">${esc(rang)}</span></div>
-        <div class="corps"><div class="nom">${esc(c.nom)}</div><div class="lieu">${esc(c.lieu)}${c.crane ? ' · niveau <img class="crane" src="assets/ui/crane.png" alt="??" title="Boss : niveau ??">' : c.niveau ? ` · niveau ${c.niveau}` : ''}</div>
+        <div class="corps"><div class="nom">${esc(c.nom)}</div><div class="lieu">${esc(c.lieu)}${c.crane ? ' · niveau <img class="crane" src="assets/ui/crane_niveau.png" alt="??" title="Boss : niveau ??">' : c.niveau ? ` · niveau ${c.niveau}` : ''}</div>
           <div class="tags">${tags.map((x) => `<span>${esc(x)}</span>`).join('')}</div>${perso ? `<div class="bas">${perso}</div>` : ''}</div></div>`;
     }).join('') || '<p class="vide">Aucun ennemi ne correspond.</p>';
   };
