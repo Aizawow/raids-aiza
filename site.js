@@ -358,7 +358,7 @@ function vueRegles() {
         <ul>${R.paris.questions.map((q) => `<li>${esc(q)}</li>`).join('')}</ul>
         <p>Si le live s'arrête avant le raid suivant, tout le monde est remboursé.</p></section>` : ''}
       <section class="surface bloc"><h2>Ta classe</h2><p>Tape <b>!class</b> suivi de ta classe dans le chat (guerrier, paladin, chasseur, voleur, prêtre, chaman, mage, démoniste, druide) pour ta couleur et ton icône.</p></section>
-      <section class="surface bloc"><h2>Hauts faits</h2><p>Chacun vaut ${D.hf.points} points : donjons complétés, familles de monstres, rares des zones, exploits de combat, points dépensés… Certains sont cachés. Ils tombent à la fin de chaque raid et se consultent dans ton profil.</p></section>
+      <section class="surface bloc"><h2>Hauts faits</h2><p>Chacun vaut ${D.hf.points} points : donjons complétés, familles de monstres, rares des zones, exploits de combat, points dépensés… Certains sont cachés. Ils tombent à la fin de chaque raid et se consultent dans ton profil. Tape <b>!classement</b> dans le chat pour connaître ta place.</p></section>
     </aside></div>`;
 }
 
