@@ -95,7 +95,13 @@ function brancherProfil(e) {
     return;
   }
   if (e.onglet === 'bestiaire') brancherBestiaire(j);
-  document.querySelectorAll('.hf.ouvrable .hf-tete').forEach((t) => { t.onclick = () => t.parentElement.classList.toggle('ouvert'); });
+  const ouvrables = () => document.querySelectorAll('.hf.ouvrable .hf-tete').forEach((t) => { t.onclick = () => t.parentElement.classList.toggle('ouvert'); });
+  ouvrables();
+  const champ = $('recherche-hf'), boite = $('hf-contenu');
+  if (champ && boite) {
+    const origine = boite.innerHTML;
+    champ.oninput = () => { boite.innerHTML = rechercheHf(j, champ.value) ?? origine; ouvrables(); };
+  }
 }
 
 /* ---------------------------------------------------------------- hauts faits d'un raider */
@@ -143,6 +149,27 @@ function ligneHf(h, j) {
     ${details ? `<div class="hf-details"><div><div class="interieur">${details}</div></div></div>` : ''}
   </article>`;
 }
+/* recherche : un haut fait par son nom ou sa description, ou une créature par son nom ; une créature fait remonter les
+   hauts faits qui la demandent, ceux de son type ou de son rang, et ceux qui regroupent les précédents */
+const sansAccent = (s) => (s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+const RANGS_NOM = { commun: 'Commun', inhabituel: 'Inhabituel', rare: 'Rare', epique: 'Épique', legendaire: 'Légendaire' };
+function rechercheHf(j, texte) {
+  const t = sansAccent(texte.trim());
+  if (t.length < 2) return null;
+  const visibles = D.hf.liste.filter((h) => !h.cache || j.hauts_faits[h.id]);
+  const creatures = (D.hf.index || []).filter((c) => sansAccent(c.nom).includes(t));
+  const trouves = new Set(visibles.filter((h) => sansAccent(h.nom).includes(t) || sansAccent(h.description).includes(t)).map((h) => h.id));
+  const lie = (h, c) => h.criteres.some((k) => (k.t === 'tuer' && k.cr === c.id)
+    || (k.t === 'compte' && Object.entries(k.filtre).every(([a, b]) => (c[a] ?? false) === b)));
+  for (const c of creatures) visibles.filter((h) => lie(h, c)).forEach((h) => trouves.add(h.id));
+  visibles.filter((h) => h.criteres.some((k) => k.t === 'haut_fait' && trouves.has(k.id))).forEach((h) => trouves.add(h.id));
+  const liste = visibles.filter((h) => trouves.has(h.id)).sort((a, b) => !!j.hauts_faits[b.id] - !!j.hauts_faits[a.id]);
+  const puces = creatures.slice(0, 8).map((c) => `<span class="puce"><b>${esc(c.nom)}</b>${[RANGS_NOM[c.rang], c.type,
+    ...(c.familles || []), c.lieu].filter(Boolean).map(esc).join(' · ')}</span>`).join('');
+  return `<h2 class="section">${liste.length} haut${liste.length > 1 ? 's' : ''} fait${liste.length > 1 ? 's' : ''} pour « ${esc(texte.trim())} »</h2>`
+    + (puces ? `<div class="puces">${puces}${creatures.length > 8 ? `<span class="puce">+ ${creatures.length - 8} autres</span>` : ''}</div>` : '')
+    + (liste.length ? liste.map((h) => ligneHf(h, j)).join('') : '<p class="vide">Aucun haut fait ne correspond.</p>');
+}
 function hautsFaits(j, cat) {
   const parCat = Object.fromEntries(D.hf.categories.map(([c]) => [c, D.hf.liste.filter((h) => h.categorie === c)]));
   const fait = (h) => !!j.hauts_faits[h.id];
@@ -163,7 +190,10 @@ function hautsFaits(j, cat) {
     const l = [...(parCat[cat] || [])].sort((a, b) => fait(b) - fait(a) || (j.hauts_faits[b.id] || '').localeCompare(j.hauts_faits[a.id] || ''));
     contenu = `<h2 class="section">${(D.hf.categories.find(([c]) => c === cat) || [, ''])[1]}</h2>` + l.map((h) => ligneHf(h, j)).join('');
   }
-  return `<div class="hf-page"><nav class="surface categories">${menu}</nav><div>${contenu}</div></div>`;
+  return `<div class="hf-page"><nav class="surface categories">${menu}</nav><div>
+    <div class="recherche recherche-hf"><input id="recherche-hf" type="search" autocomplete="off"
+      placeholder="Rechercher un haut fait ou une créature (ex. : loup, Aku'mai, Mortemines)" aria-label="Rechercher un haut fait"></div>
+    <div id="hf-contenu">${contenu}</div></div></div>`;
 }
 
 /* ---------------------------------------------------------------- classements */
