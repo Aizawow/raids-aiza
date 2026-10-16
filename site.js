@@ -40,10 +40,21 @@ const trouver = (texte) => {
   return v ? D.joueurs.find((x) => x.nom.toLowerCase() === v || (x.login || '').toLowerCase() === v) : null;
 };
 
+// meta.json (toujours frais) donne l'empreinte de chaque fichier : un fichier qui n'a pas changé depuis la dernière
+// visite vient du cache du navigateur, seuls les autres sont retéléchargés
 async function charger() {
-  const lire = async (n) => (await fetch(`data/${n}.json?v=${Date.now() >> 16}`)).json();
-  [D.joueurs, D.bestiaire, D.hf, D.raids, D.regles, D.meta] = await Promise.all(
-    ['joueurs', 'bestiaire', 'hauts_faits', 'raids', 'regles', 'meta'].map(lire));
+  D.meta = await (await fetch(`data/meta.json?t=${Date.now()}`, { cache: 'no-store' })).json();
+  const v = D.meta.v || {};
+  const lire = async (n) => {
+    const r = await fetch(`data/${n}.json?v=${v[n] || Date.now() >> 16}`);
+    if (!r.ok) throw new Error(`${n} : ${r.status}`);
+    return r.json();
+  };
+  [D.joueurs, D.bestiaire, D.hf, D.raids, D.regles] = await Promise.all(['joueurs', 'bestiaire', 'hauts_faits', 'raids', 'regles'].map(lire));
+  for (const j of D.joueurs) {                  // ancien format : le détail était dans joueurs.json
+    if (j.tues) j.detail = true;
+    if (j.nb_tues == null) j.nb_tues = Object.keys(j.tues || {}).length;
+  }
   D.parHf = Object.fromEntries(D.hf.liste.map((h) => [h.id, h]));
   D.parCr = Object.fromEntries(D.bestiaire.map((c) => [c.id, c]));
   document.title = D.meta.titre;
@@ -51,6 +62,16 @@ async function charger() {
   $('liste-joueurs').innerHTML = D.joueurs.map((j) => `<option value="${esc(j.nom)}">`).join('');
   $('pied').textContent = `Mis à jour le ${new Date(D.meta.maj).toLocaleString('fr-FR', { dateStyle: 'long', timeStyle: 'short' })}`;
   afficher();
+}
+// détail d'un raider (hauts faits obtenus, ennemis rencontrés et vaincus) : chargé à l'ouverture de son profil
+const enCours = {};
+function chargerProfil(j) {
+  if (j.detail) return Promise.resolve(j);
+  enCours[j.profil] = enCours[j.profil] || fetch(`data/profils/${encodeURIComponent(j.profil)}.json?v=${j.v || ''}`)
+    .then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then((p) => Object.assign(j, p, { detail: true }))
+    .finally(() => { delete enCours[j.profil]; });
+  return enCours[j.profil];
 }
 // recherche : le pseudo doit exister (un raider apparaît après son premier raid)
 const chercher = (texte, ou) => {
@@ -77,6 +98,14 @@ function afficher() {
   if (actuel) memoire.ecrire(e, actuel);
   document.querySelector('#onglets a[data-vue="profil"]').href = memoire.lien() || '#vue=profil';
   document.querySelectorAll('#onglets a').forEach((a) => a.classList.toggle('actif', a.dataset.vue === vue));
+  if (actuel && !actuel.detail) {                // profil pas encore chargé : on l'attend, puis on affiche
+    const h = location.hash;
+    $('vue').innerHTML = '<p class="vide">Chargement du profil…</p>';
+    chargerProfil(actuel).then(() => { if (location.hash === h) afficher(); }, () => {
+      if (location.hash === h) $('vue').innerHTML = '<p class="vide">Profil indisponible pour le moment : réessaie dans un instant.</p>';
+    });
+    return;
+  }
   const vues = { profil: vueProfil, classements: vueClassements, bestiaire: vueBestiaire, raids: vueRaids, regles: vueRegles };
   $('vue').innerHTML = (vues[vue] || vueProfil)(e);
   if (vue === 'profil') brancherProfil(e);
@@ -108,7 +137,7 @@ function vueProfil(e) {
   const tete = `<div class="surface profil" style="--classe:${j.couleur}"><img class="avatar" src="${classeImg(j.classe)}" alt="">
       <div><div class="nom">${esc(j.nom)}</div><div class="sous">${esc(classe)}${j.classe_choisie ? '' : ' · classe tirée au hasard (!class pour choisir)'}</div></div>
       <div class="points"><div><small>Points de hauts faits</small><b>${nb(j.points)}</b></div><i></i></div></div>
-    <div class="stats-rapides"><div><b>${nb(s.victoires)}</b><span>Victoires</span></div><div><b>${nb(Object.keys(j.tues).length)}</b><span>Ennemis vaincus</span></div>
+    <div class="stats-rapides"><div><b>${nb(s.victoires)}</b><span>Victoires</span></div><div><b>${nb(j.nb_tues)}</b><span>Ennemis vaincus</span></div>
       <div><b>${nb(s.degats)}</b><span>Dégâts infligés</span></div><div><b>${nb(s.points)}</b><span>Points dépensés</span></div></div>
     <nav class="sous-onglets"><a href="${lienProfil(j)}" class="${onglet === 'hf' ? 'actif' : ''}">Hauts faits</a>
       <a href="${lienProfil(j, { onglet: 'bestiaire' })}" class="${onglet === 'bestiaire' ? 'actif' : ''}">Bestiaire</a></nav>`;
@@ -225,7 +254,7 @@ function hautsFaits(j, cat) {
 
 /* ---------------------------------------------------------------- classements */
 const CLASSEMENTS = [['hf', 'Hauts faits', (j) => j.points, 'points'], ['degats', 'Dégâts', (j) => j.stats.degats, 'dégâts'],
-  ['victoires', 'Victoires', (j) => j.stats.victoires, 'victoires'], ['ennemis', 'Ennemis vaincus', (j) => Object.keys(j.tues).length, 'ennemis'],
+  ['victoires', 'Victoires', (j) => j.stats.victoires, 'victoires'], ['ennemis', 'Ennemis vaincus', (j) => j.nb_tues, 'ennemis'],
   ['coups_fatals', 'Coups de grâce', (j) => j.stats.coups_fatals, 'coups de grâce'], ['premier_dps', 'Premier au DPS', (j) => j.stats.premier_dps, 'fois'],
   ['interruptions', 'Interruptions', (j) => j.stats.interruptions, 'interruptions'], ['dissipations', 'Dissipations', (j) => j.stats.dissipations, 'dissipations'],
   ['furies', 'BL', (j) => j.stats.furies, 'BL'], ['points', 'Points dépensés', (j) => j.stats.points, 'points']];
