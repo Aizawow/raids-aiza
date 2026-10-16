@@ -137,7 +137,8 @@ h2.section::after { content: ""; flex: 1; height: 1px; background: linear-gradie
 .hf-details { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .25s ease; }
 .hf.ouvert .hf-details { grid-template-rows: 1fr; }
 .hf-details > div { overflow: hidden; min-height: 0; }
-.hf-details .interieur { margin: 0 18px 14px 88px; padding-top: 12px; border-top: 1px solid rgba(60, 35, 10, .25); }
+/* détails alignés sur la colonne du texte : après l'icône (10 + 64 + 14 px), avant le blason (14 + 70 + 14 px) */
+.hf-details .interieur { margin: 0 98px 14px 88px; padding-top: 12px; border-top: 1px solid rgba(60, 35, 10, .25); }
 .hf.non .hf-details .interieur { border-top-color: rgba(255, 255, 255, .15); }
 .liste-crit { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 22px; }
 .crit { display: flex; align-items: center; gap: 8px; min-width: 0; font-size: 14px; color: #6b6355; }
@@ -274,7 +275,7 @@ table.tab { width: 100%; border-collapse: collapse; }
   .hf-tete { grid-template-columns: 54px minmax(0, 1fr) 52px; gap: 10px; }
   .hf-icone { transform: scale(.85); transform-origin: left center; }
   .hf-bouclier { width: 48px; height: 48px; } .hf-bouclier span { top: 13px; font-size: 14px; }
-  .hf-details .interieur { margin-left: 14px; }
+  .hf-details .interieur { margin-left: 14px; margin-right: 14px; }
   .podium, .sorts-boss { grid-template-columns: 1fr; }
   .accueil { padding: 30px 18px 22px; margin: 16px auto; } .accueil-recherche { flex-direction: column; }
   .grille { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
