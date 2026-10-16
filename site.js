@@ -309,7 +309,7 @@ function brancherBestiaire(j) {
       }
       return `<div class="surface ennemi${j && statut(c) === 'n' ? ' terne' : ''}" style="--r:${coul}">
         <div class="portrait">${c.image ? `<img src="${c.image}" alt="" loading="lazy">` : '<span class="point">?</span>'}<span class="badge">${esc(rang)}</span></div>
-        <div class="corps"><div class="nom">${esc(c.nom)}</div><div class="lieu">${esc(c.lieu)}${c.niveau ? ` · niveau ${c.niveau}` : ''}</div>
+        <div class="corps"><div class="nom">${esc(c.nom)}</div><div class="lieu">${esc(c.lieu)}${c.crane ? ' · niveau <img class="crane" src="assets/ui/crane.png" alt="??" title="Boss : niveau ??">' : c.niveau ? ` · niveau ${c.niveau}` : ''}</div>
           <div class="tags">${tags.map((x) => `<span>${esc(x)}</span>`).join('')}</div>${perso ? `<div class="bas">${perso}</div>` : ''}</div></div>`;
     }).join('') || '<p class="vide">Aucun ennemi ne correspond.</p>';
   };
@@ -335,7 +335,7 @@ function vueRegles() {
   return `<div class="titre-page"><h1>Règles</h1><p>Comment fonctionnent les raids de la chaîne</p></div>
     <div class="regles"><div>
       <section class="surface bloc"><h2>Comment ça marche</h2>
-        <p>Pendant le live, un ennemi de World of Warcraft: Forever surgit toutes les ${a} à ${b} minutes. Une roulette tire son rang, puis il apparaît : le raid a quelques minutes pour l'abattre avant qu'il ne s'enfuie. Ses points de vie dépendent du nombre de viewers présents${R.niveaux && R.niveaux.actif !== false ? ` et de son niveau : un ennemi de niveau ${R.niveaux.reference} a les points de vie de son rang, un ennemi de bas niveau jusqu'à ${Math.round(100 * (1 - R.niveaux.min))} % de moins, un ennemi de niveau 60 environ ${Math.round(100 * (Math.min(R.niveaux.max, (60 / R.niveaux.reference) ** R.niveaux.exposant) - 1))} % de plus${R.niveaux.legendaires ? '' : ' (les légendaires gardent les points de vie de leur rang)'}` : ''}.</p>
+        <p>Pendant le live, un ennemi de World of Warcraft: Forever surgit toutes les ${a} à ${b} minutes. Une roulette tire son rang, puis il apparaît : le raid a quelques minutes pour l'abattre avant qu'il ne s'enfuie. Ses points de vie dépendent du nombre de viewers présents${R.niveaux && R.niveaux.actif !== false ? ` et de son niveau : les boss de raid et les légendaires sont de niveau 60 (tête de mort), un ennemi de niveau ${R.niveaux.reference} a les points de vie de son rang, un ennemi de bas niveau jusqu'à ${Math.round(100 * (1 - R.niveaux.min))} % de moins, un ennemi de niveau 60 environ ${Math.round(100 * (Math.min(R.niveaux.max, (60 / R.niveaux.reference) ** R.niveaux.exposant) - 1))} % de plus${R.niveaux.legendaires ? '' : ' (les légendaires gardent les points de vie de leur rang)'}` : ''}.</p>
         <p>On l'attaque avec ses <b>points de chaîne</b> : ouvre le menu des points sous le chat de Twitch, les attaques n'y apparaissent que pendant un raid. Une attaque lancée quand aucun raid n'est en cours, ou impossible à ce moment-là, est <b>remboursée</b>.</p></section>
       <section class="surface bloc"><h2>Attaques</h2><div class="attaques">${R.attaques.map((x) => `<div class="attaque"><img src="assets/icones/${x.id}.png" alt="">
         <div><div class="t"><b>${esc(x.titre)}</b><small>${nb(x.cout)} pts</small></div><p>${esc(x.description)}</p></div></div>`).join('')}</div></section>
